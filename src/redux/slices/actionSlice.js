@@ -4,7 +4,8 @@ const actionSlice = createSlice({
     name: 'action',
     initialState: {
         isFetching: false,
-        error: false
+        error: false,
+        isDeleteForm: false,
     },
     reducers:{
         //START
@@ -21,9 +22,12 @@ const actionSlice = createSlice({
         actionSuccess: (state) => {
             state.isFetching = false;
             state.error = false;
+        },
+        setIsDeleteForm: (state, action) => {
+            state.isDeleteForm = action.payload
         }
     }
 })
 
-export const {actionStart, actionFailure, actionSuccess} = actionSlice.actions
+export const {actionStart, actionFailure, actionSuccess, setIsDeleteForm} = actionSlice.actions
 export default actionSlice.reducer

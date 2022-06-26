@@ -1,134 +1,33 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import Pagination from './Pagination';
 
 const Table = (props) => {
-
-  const pageNumberLimit = 5;
-  const [passengersData, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [maxPageLimit, setMaxPageLimit] = useState(5);
-  const [minPageLimit, setMinPageLimit] = useState(0);
-  useEffect(()=>{
-    setLoading(true);
-    fetch(`https://api.instantwebtools.net/v1/passenger?currentPage=${currentPage}&size=5`)
-    .then((response) => response.json())
-    .then((json) => { setData(json); setLoading(false);});
-    
-  },[currentPage]);
-
-  const paginationAttributes = {
-    currentPage,
-    maxPageLimit,
-    minPageLimit,
-    response: passengersData,
-  };
-  const onPrevClick = () => {
-    if ((currentPage - 1) % pageNumberLimit === 0) {
-      setMaxPageLimit(maxPageLimit - pageNumberLimit);
-      setMinPageLimit(minPageLimit - pageNumberLimit);
-    }
-    setCurrentPage(prev => prev - 1);
-  }
-  const onNextClick = () => {
-    if (currentPage + 1 > maxPageLimit) {
-      setMaxPageLimit(maxPageLimit + pageNumberLimit);
-      setMinPageLimit(minPageLimit + pageNumberLimit);
-    }
-    setCurrentPage(prev => prev + 1);
-  }
-  const onPageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  }
-
-  const tableHeader = props.tableHeader
-
-  const tableBody = props.tableBody
 
   return (
     <>
       <TableWrapper>
-        <thead>
-          <tr class="table-header">
-            {tableHeader.map((item, index)=>(
-              <td key={index}>{item}</td>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Tin học đại cương</td>
-            <td>11/04/2022</td>
-            <td>Phạm Văn A</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Tin học đại cương</td>
-            <td>11/04/2022</td>
-            <td>Phạm Văn A</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Tin học đại cương</td>
-            <td>11/04/2022</td>
-            <td>Phạm Văn A</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Tin học đại cương</td>
-            <td>11/04/2022</td>
-            <td>Phạm Văn A</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Tin học đại cương</td>
-            <td>11/04/2022</td>
-            <td>Phạm Văn A</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Tin học đại cương</td>
-            <td>11/04/2022</td>
-            <td>Phạm Văn A</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Tin học đại cương</td>
-            <td>11/04/2022</td>
-            <td>Phạm Văn A</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Tin học đại cương</td>
-            <td>11/04/2022</td>
-            <td>Phạm Văn A</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Tin học đại cương</td>
-            <td>11/04/2022</td>
-            <td>Phạm Văn A</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Tin học đại cương</td>
-            <td>11/04/2022</td>
-            <td>Phạm Văn A</td>
-          </tr>
-        </tbody>
+        {props.children}
       </TableWrapper>
-      <Pagination {...paginationAttributes} 
-                          onPrevClick={onPrevClick} 
-                          onNextClick={onNextClick}
-                          onPageChange={onPageChange}/>
-      
     </>
   )
 }
 
 export default Table
+
+
+export const TableHeader = (props) => (
+  <thead>
+    <tr className="table-header">
+      {props.children}
+    </tr>
+  </thead>
+)
+
+export const TableBody = (props) => (
+  <tbody>
+    {props.children}
+  </tbody>
+)
 
 const TableWrapper = styled.table`
   width: 100%;
@@ -150,8 +49,32 @@ const TableWrapper = styled.table`
     }
   }
   tbody{
-      tr:nth-child(even) {
-        background: var(--grey-bg);
+    tr:nth-child(even) {
+      background: var(--grey-bg);
+    }
+      /* tr:hover {
+        
+        td{
+          transform: scale(1.05);
+        }
+      } */
+
+    .tbl-icon{
+      display: flex;
+      gap: 0.5rem;
+        
+
+      span{
+        font-size:16px;
+        cursor: pointer;
+
+        &:hover{
+          transform: scale(1.05);
+          color: var(--primary-color)
+        }
+      }
+
+        
       }
   }
   

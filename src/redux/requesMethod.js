@@ -7,7 +7,7 @@ export const publishRequest = axios.create({
     baseURL: BASE_URL,
 })
 
-export const userRequest = axios.create({ 
-    baseURL: BASE_URL,
-    headers: {token: TOKEN}
-})
+// export const userRequest = axios.create({ 
+//     baseURL: BASE_URL,
+//     headers: {token: TOKEN}
+// })

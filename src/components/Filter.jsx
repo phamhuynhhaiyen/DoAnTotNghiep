@@ -1,39 +1,54 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { DownOutlined } from '@ant-design/icons'
 
 
-const Filter = props => {
+const Filter = (props) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const toggling = () => setIsOpen(!isOpen);
+
+  const ref = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref]);
+  
   return (
     <Wrapper>
       <span className="title">{props.title}</span>
-      <DropDownContainer>
+      <DropDownContainer ref={ref}>
         <DropDownHeader onClick={toggling}>
-          <span>Tất cả</span>
+          <span>{props.value}</span>
           <DownOutlined/>
         </DropDownHeader>
-          {/* <DropDownListContainer isOpen={isOpen}>
-            <DropDownList>
-              <ListItem>Mangoes vcvdv</ListItem>
-              <ListItem>Apples</ListItem>
-              <ListItem>Oranges</ListItem>
-            </DropDownList>
-          </DropDownListContainer> */}
+          <DropDownListContainer isOpen={isOpen}>
+            {props.children}
+          </DropDownListContainer>
       </DropDownContainer>
     </Wrapper>
   )
 }
 
-Filter.propTypes = {
-  title: PropTypes.string,
-  dataOptions: PropTypes.array
-}
+
 
 export default Filter
+
+export const DropdownItem = (props)=>(
+  <ListItem>
+    {props.children}
+  </ListItem>
+)
 
 const Wrapper = styled.div`
   display: flex;
@@ -55,29 +70,29 @@ const DropDownHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center ;
-  width: 4rem;
+  cursor: pointer;
 
   .anticon{
     font-size: 11px;
+    margin-left:0.5rem ;
   }
 `
 
 const DropDownListContainer = styled.div`
   display: ${props => props.isOpen ? 'initial' : 'none'};
-  position: absolute
-`
-
-const DropDownList = styled.ul`
+  position: absolute;
   padding: 0;
-  margin: 0;
+  margin-top: 0.25rem;
   background: #ffffff;
-  border: 2px solid #e5e5e5;
-  &:first-child {
-    padding-top: 0.8em;
-  }
+  border: 1px solid var(--primary-bg);
+  border-radius: 4px;
 `
 
 const ListItem = styled.li`
   list-style: none;
-  margin-bottom: 0.8em;
+  padding: 0.8em;
+  &:hover {
+    cursor: pointer;
+    background-color: var(--grey-bg);
+  }
 `

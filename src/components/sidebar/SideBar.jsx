@@ -1,9 +1,10 @@
-import { DatabaseOutlined, DesktopOutlined, FolderOpenOutlined } from '@ant-design/icons'
-import React from 'react'
+import { DatabaseOutlined, DesktopOutlined, FolderOpenOutlined, IdcardOutlined, LaptopOutlined } from '@ant-design/icons'
+import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Wrapper } from './SideBarStyle'
 
-const menuItems = [
+
+const menuLecture = [
   {
     name: 'Tài liệu',
     icon: <FolderOpenOutlined />,
@@ -21,16 +22,7 @@ const menuItems = [
   {
     name: 'Đồ án',
     icon: <DatabaseOutlined />,
-    submenu: [
-      {
-        name: 'Danh sách đồ án',
-        path: '/final-project-list'
-      },
-      {
-        name: 'Duyệt đồ án',
-        path: '/approve-final-project'
-      }
-    ]
+    path: '/final-project'
   },
   {
     name: 'Lớp học',
@@ -38,10 +30,80 @@ const menuItems = [
     path: '/class'
   }
 ]
+const menuAdmin = [
+  {
+    name: 'Tài khoản',
+    icon: <IdcardOutlined />,
+    submenu: [
+      {
+        name: 'Sinh viên',
+        path: '/students'
+      },
+      {
+        name: 'Giảng viên',
+        path: '/lectures'
+      }
+    ]
+  },
+  {
+    name: 'Môn học',
+    icon: <LaptopOutlined />,
+    path: '/subjects'
+  },
+  {
+    name: 'Đợt bảo vệ đồ án',
+    icon: <DatabaseOutlined />,
+    path: '/semester-managerment'
+  }
+]
+
+const menuStudent = [
+  {
+    name: 'Tài liệu',
+    icon: <FolderOpenOutlined />,
+    path: '/document-list'
+  },
+  {
+    name: 'Đồ án',
+    icon: <DatabaseOutlined />,
+    submenu: [
+      {
+        name: 'Danh sách đồ án',
+        path: '/final-project'
+      },
+      {
+        name: 'Đồ án của bạn',
+        path: '/my-final-project'
+      },
+    ]
+  },
+  {
+    name: 'Lớp học',
+    icon: <DesktopOutlined />,
+    path: '/class'
+  }
+
+]
 
 const SideBar = () => {
 
   const location = useLocation()
+  const [menuItems, setMenuItems] = useState([])
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
+
+  useEffect(() => {
+    if (user !== null && user.permission === "lecture") {
+      setMenuItems(menuLecture)
+    }
+    if (user !== null && user.permission === "admin") {
+      setMenuItems(menuAdmin)
+    }
+    if (user !== null && user.permission === "student") {
+      setMenuItems(menuStudent)
+    }
+  }, [user])
+
+  // console.log(location)
 
   return (
     <Wrapper>
@@ -50,13 +112,13 @@ const SideBar = () => {
           <div className="menu-item">
             {
               item.path ?
-                <div className={`link-name ${item.path === location.pathname && 'active-separate'}`}>
+                <div className={`link-name ${location.pathname.includes(item.path) && 'active-separate'}`}>
                   <Link to={item.path}>
                     {item.icon}
                     <span>{item.name}</span>
                   </Link>
                 </div> :
-                <div className={`link-name ${item.submenu.some((obj)=>obj.path === location.pathname) && 'active'}`}>
+                <div className={`link-name ${item.submenu.some((obj) => obj.path === location.pathname) && 'active'}`}>
                   {item.icon}
                   <span>{item.name}</span>
                 </div>

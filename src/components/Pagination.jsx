@@ -1,19 +1,13 @@
 import React from 'react'
 import styled from 'styled-components';
-const renderData = (data)=>{
-    return(
-        <ul>
-            {data.map((d)=> 
-            <li key={d['_id']}> The passenger having id {d['_id'].slice(d['_id'].length-5)} using {d.airline[0].name} airlines</li>)
-            }
-        </ul>
-    )
-}
+
 const Pagination = (props) => {
   // init
-  const { currentPage, maxPageLimit, minPageLimit} = props;
-  const totalPages = props.response.totalPages-1;
-  const data = props.response.data;
+  const currentPage = props.currentPage;
+  const maxPageLimit = props.response.totalPages;
+  const minPageLimit = 0;
+
+  const totalPages = props.response.totalPages;
 
   
     // build page numbers list based on total number of pages
@@ -63,11 +57,6 @@ const Pagination = (props) => {
     }
 
     return (
-        // <Wrapper>
-        //     <div className="mainData">
-        //       {/* {renderData(data)} */}
-
-        //     </div>
             <Wrapper> 
                <li>
                    <button onClick={handlePrevClick} disabled={currentPage === pages[0]}>Trước</button>
@@ -79,7 +68,6 @@ const Pagination = (props) => {
                    <button onClick={handleNextClick} disabled={currentPage === pages[pages.length-1]}>Sau</button>
                </li>
             </Wrapper>
-        // </Wrapper>
     )
 }
 

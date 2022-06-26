@@ -5,9 +5,9 @@ import styled from 'styled-components'
 
 const SearchInput = props => {
   return (
-    <Wrapper width={props.width} filterIcon={props.filterIcon}>
+    <Wrapper width={props.width} filterIcon={props.filterIcon} height={props.height}>
         <SearchOutlined />
-        <input placeholder={props.placeholder}/>    
+        <input placeholder={props.placeholder} onKeyDown={props.onKeyDown ? () => props.onKeyDown() : null}/>    
         <div className="filter-icon">
             <SlidersOutlined />
         </div>
@@ -20,7 +20,7 @@ const Wrapper = styled.div`
     background: var(--grey-bg);
     border: var(--primary-bg) 1px solid;
     border-radius: 12px;
-    height: 48px;
+    height: ${props => props.height ? props.height : `48px`};
     display: flex;
     align-items: center;
     gap: 8px;
@@ -48,7 +48,9 @@ SearchInput.propTypes = {
     width: PropTypes.string,
     onchange: PropTypes.func,
     placeholder: PropTypes.string,
-    filterIcon: PropTypes.bool
+    filterIcon: PropTypes.bool,
+    height: PropTypes.string,
+    onKeyDown: PropTypes.func,
 }
 
 export default SearchInput
